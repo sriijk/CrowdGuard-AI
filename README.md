@@ -65,7 +65,7 @@ CrowdGuard-AI/
 ├── app.py                    # Main Logic
 ├── streamlit_app.py          # Main Streamlit application
 ├── requirements.txt          # All required libraries
-├── app_utils/
+├── model/
 |   └──yolov8n.pt             # YOLOv8 Nano model 
 ├── TestVideo.mp4             # Sample video for testing
 └── README.md                 # This file
