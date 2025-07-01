@@ -1,0 +1,81 @@
+# --- Base Python ignores ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Environments ---
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# --- Package management ---
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+lib/
+lib64/
+pip-log.txt
+pip-delete-this-directory.txt
+*.manifest
+*.spec
+.installed.cfg
+wheels/
+share/python-wheels/
+.Python
+develop-eggs/
+downloads/
+sdist/
+var/
+.eggs/
+
+# --- Python bytecode ---
+*.pyc
+*.pyo
+
+# --- Jupyter, test, cache ---
+.ipynb_checkpoints
+.mypy_cache/
+.pytest_cache/
+.tox/
+coverage.xml
+.coverage
+*.cover
+.hypothesis/
+.dmypy.json
+.pyre/
+.pytype/
+htmlcov/
+
+# --- IDE-specific ---
+.vscode/
+.idea/
+.spyderproject
+.spyproject
+.ropeproject
+
+# --- Logs and temp files ---
+*.log
+*.tmp
+
+# --- Streamlit specific ---
+.streamlit/
+*.pyc
+
+# --- Media & model files (you should NOT upload these to GitHub) ---
+*.mp4
+*.avi
+*.m4a
+*.pt
+
+# --- Custom project files ---
+logs/
+heatmaps/
+datasets/
+outputs/
+__marimo__/
