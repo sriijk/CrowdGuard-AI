@@ -60,14 +60,12 @@ This system is especially beneficial for event organizers, public safety officia
 CrowdGuard-AI/
 ├── app_utils/
 │   ├── detection.py          # YOLOv8 detection wrapper
-│   ├── zone_analysis.py      # Zone heatmap and density calculator
-│   └── plotting.py           # Graph drawing utils
-├── assets/
-│   └── Beep.m4a              # Audio alert sound
-├── style.css                 # Custom Streamlit UI styling
+│   └── zone_analysis.py      # Zone heatmap and density calculator
+├── Beep.m4a / Beep2.m4a      # Audio alert sound
 ├── streamlit_app.py          # Main Streamlit application
 ├── requirements.txt          # All required libraries
-├── yolov8n.pt                # YOLOv8 Nano model (not committed)
+├── app_utils/
+|   └──yolov8n.pt             # YOLOv8 Nano model 
 ├── TestVideo.mp4             # Sample video for testing
 └── README.md                 # This file
 ```
