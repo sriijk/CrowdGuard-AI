@@ -62,6 +62,7 @@ CrowdGuard-AI/
 │   ├── detection.py          # YOLOv8 detection wrapper
 │   └── zone_analysis.py      # Zone heatmap and density calculator
 ├── Beep.m4a / Beep2.m4a      # Audio alert sound
+├── app.py                    # Main Logic
 ├── streamlit_app.py          # Main Streamlit application
 ├── requirements.txt          # All required libraries
 ├── app_utils/
