@@ -1,0 +1,10 @@
+streamlit>=1.32
+opencv-python
+numpy
+pandas
+matplotlib
+seaborn
+ultralytics
+torch
+pyttsx3
+Pillow
