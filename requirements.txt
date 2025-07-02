@@ -1,5 +1,6 @@
 streamlit>=1.32
 opencv-python
+opencv-python-headless
 numpy
 pandas
 matplotlib
