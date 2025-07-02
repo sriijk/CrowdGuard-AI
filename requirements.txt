@@ -9,3 +9,5 @@ torch
 Pillow
 streamlit-webrtc==0.45.0
 pyttsx3
+av
+aiortc
