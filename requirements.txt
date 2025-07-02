@@ -1,11 +1,10 @@
 streamlit>=1.32
-opencv-python
+opencv-python-headless
 numpy
 pandas
 matplotlib
 seaborn
 ultralytics
 torch
-pyttsx3
 Pillow
 streamlit-webrtc==0.45.0
