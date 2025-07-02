@@ -57,17 +57,13 @@ CrowdGuard-AI/
 └── yolov8n.pt               # Pre-trained YOLOv8 Nano model
 ```
 
-📚 YOLOv8 Model Info
-Model used: yolov8n.pt
+## 📚 YOLOv8 Model Info
 
-Download link:
-
-* [wget https://github.com/ultralytics/assets/releases/download/v0.0.0/yolov8n.pt]
-Trained on: COCO dataset
-
-Size: ~6 MB
-
-Purpose: Optimized for fast, lightweight real-time detection (ideal for webcam or video)
+### Model used: yolov8n.pt
+* Download link: [wget https://github.com/ultralytics/assets/releases/download/v0.0.0/yolov8n.pt]
+* Trained on: COCO dataset
+* Size: ~6 MB
+* Purpose: Optimized for fast, lightweight real-time detection (ideal for webcam or video)
 
 ⚠️ Note: The model file is not included in this repository. Please download it manually using the command above and place it in the root folder of the project before running.
 
