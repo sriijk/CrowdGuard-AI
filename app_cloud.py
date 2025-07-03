@@ -77,8 +77,8 @@ FRAME_WINDOW = st.empty()
 def render_stats(current_total):
     elapsed = time.time() - st.session_state.start_time
     avg_density = np.mean([
-        sum([v for k, v in row.items() if k.startswith("Zone_")]) for row in reversed(st.session_state.LOG)
-    ]) if st.session_state.LOG else 0  # Reversed here
+    sum([v for k, v in row.items() if k.startswith("Zone_")]) for row in reversed(st.session_state.LOG[-30:])
+]) if st.session_state.LOG else 0  # Avg over last 30 logs only
 
     if current_total > st.session_state.peak_count:
         st.session_state.peak_count = current_total
@@ -88,6 +88,7 @@ def render_stats(current_total):
     col2.metric("📈 Peak", st.session_state.peak_count)
     col3.metric("⏱️ Uptime", f"{int(elapsed)}s")
     col4.metric("📊 Avg Density", f"{avg_density:.1f}")
+
 
 # ------------------ MODES ------------------
 if st.session_state.source_mode is None:
@@ -117,7 +118,7 @@ elif st.session_state.source_mode == "webcam":
             detections = detect_people(model, img, conf=detection_confidence)
             draw_zone_grid(img, GRID_ROWS, GRID_COLS)
 
-            # ✅ Status message (Webcam)
+            # ✅ ADD STATUS MESSAGE HERE (Webcam)
             alert_messages = []
             for i, count in enumerate(zone_counts):
                 if count >= alert_threshold:
@@ -128,7 +129,6 @@ elif st.session_state.source_mode == "webcam":
                 st.warning("\n".join(alert_messages))
             else:
                 st.success("🟢 Normal: All zones under control")
-
 
             for det in detections:
                 x1, y1, x2, y2, conf = det
@@ -188,6 +188,18 @@ elif st.session_state.source_mode == "video":
                 zone_counts = [0] * (GRID_ROWS * GRID_COLS)
                 detections = detect_people(model, frame, conf=detection_confidence)
                 draw_zone_grid(frame, GRID_ROWS, GRID_COLS)
+
+                # ✅ ADD STATUS MESSAGE HERE (Video)
+                alert_messages = []
+                for i, count in enumerate(zone_counts):
+                    if count >= alert_threshold:
+                        alert_messages.append(f"🚨 Overcrowded: People: {count}, Zone: {i}")
+                    elif count >= int(alert_threshold * 0.6):
+                        alert_messages.append(f"⚠️ Moderate crowd: People: {count}, Zone: {i}")
+                if alert_messages:
+                    st.warning("\n".join(alert_messages))
+                else:
+                    st.success("🟢 Normal: All zones under control")
 
                 for det in detections:
                     x1, y1, x2, y2, conf = det
