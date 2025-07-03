@@ -94,6 +94,7 @@ if st.session_state.source_mode is None:
     st.warning("⚠️ Browser webcam access may not work in Safari. Please use Chrome or Firefox.")
 
 elif st.session_state.source_mode == "webcam":
+    st.info("⚠️ Note: If you're running this app on platforms like Hugging Face or Streamlit Cloud, browser webcam and AI speech functionality may not work. Please run this app locally to access those features.")
 
     class VideoProcessor(VideoTransformerBase):
         def __init__(self):
