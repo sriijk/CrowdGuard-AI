@@ -51,7 +51,6 @@ show_boxes = st.sidebar.checkbox("Show Detection Boxes", value=True)
 
 if st.sidebar.button("▶️ Start Webcam"):
     st.session_state.source_mode = "webcam"
-    st.info("⚠️ Note: If you're running this app on platforms like Hugging Face or Streamlit Cloud, browser webcam and AI speech functionality may not work. Please run this app locally to access those features.")
 if st.sidebar.button("⏹️ Stop Webcam"):
     st.session_state.source_mode = None
 if st.sidebar.button("📁 Upload Video"):
