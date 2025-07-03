@@ -1,4 +1,3 @@
-# ✅ FULL UPDATED CODE (Reverse Logs in Webcam & Video Modes)
 import streamlit as st
 import cv2
 import numpy as np
@@ -20,6 +19,7 @@ from utils import detect_people, get_zone_id, draw_zone_grid
 GRID_ROWS, GRID_COLS = 3, 3
 model = YOLO("yolov8n.pt")
 
+# ✅ Play beep sound via HTML (Cloud-friendly)
 def play_beep():
     with open("Beep2.m4a", "rb") as f:
         beep_base64 = base64.b64encode(f.read()).decode("utf-8")
@@ -29,6 +29,7 @@ def play_beep():
     </audio>
     """, height=0)
 
+# ✅ Updated speak() function to auto-play beep on cloud
 def speak(text):
     if platform.system() == "Windows":
         try:
@@ -45,14 +46,15 @@ def speak(text):
 st.set_page_config(page_title="CrowdGuardAI", layout="wide")
 st.title("\U0001F6E1️ CrowdGuardAI - Real-Time Crowd Monitoring")
 
+# Init session state
 for key, val in {
     "source_mode": None, "last_beep": 0, "LOG": [],
-    "peak_count": 0, "start_time": time.time(), "zone_beep_timers": {},
-    "STATUS_BLOCKS": []
+    "peak_count": 0, "start_time": time.time(), "zone_beep_timers": {}
 }.items():
     if key not in st.session_state:
         st.session_state[key] = val
 
+# Sidebar controls
 st.sidebar.header("⚙️ Control Settings")
 alert_threshold = st.sidebar.slider("Overcrowding Alert Threshold (per zone)", 1, 50, 5)
 detection_confidence = st.sidebar.slider("Detection Confidence", 0.1, 1.0, 0.5)
@@ -71,11 +73,12 @@ if st.sidebar.button("🔙 Back to Home"):
 
 FRAME_WINDOW = st.empty()
 
+# ✅ FINAL CODE (Only Display Metrics Reversed)
 def render_stats(current_total):
     elapsed = time.time() - st.session_state.start_time
     avg_density = np.mean([
-        sum([v for k, v in row.items() if k.startswith("Zone_")]) for row in reversed(st.session_state.LOG[-30:])
-    ]) if st.session_state.LOG else 0
+    sum([v for k, v in row.items() if k.startswith("Zone_")]) for row in reversed(st.session_state.LOG[-30:])
+]) if st.session_state.LOG else 0  # Avg over last 30 logs only
 
     if current_total > st.session_state.peak_count:
         st.session_state.peak_count = current_total
@@ -86,18 +89,8 @@ def render_stats(current_total):
     col3.metric("⏱️ Uptime", f"{int(elapsed)}s")
     col4.metric("📊 Avg Density", f"{avg_density:.1f}")
 
-    # ✅ Save status block
-    status_block = f"👥 Current: {current_total}\n📈 Peak: {st.session_state.peak_count}\n⏱️ Uptime: {int(elapsed)}s\n📊 Avg Density: {avg_density:.1f}"
-    st.session_state.STATUS_BLOCKS.append(status_block)
-    if len(st.session_state.STATUS_BLOCKS) > 30:
-        st.session_state.STATUS_BLOCKS = st.session_state.STATUS_BLOCKS[-30:]
 
-def display_status_logs():
-    st.subheader("📋 Recent Crowd Readings (Latest on Top)")
-    for block in reversed(st.session_state.STATUS_BLOCKS):
-        st.text(block)
-        st.markdown("---")
-
+# ------------------ MODES ------------------
 if st.session_state.source_mode is None:
     st.markdown("""
     This tool uses YOLOv8 for:
@@ -137,6 +130,7 @@ elif st.session_state.source_mode == "webcam":
             total = sum(zone_counts)
             render_stats(total)
 
+            # ✅ ADD STATUS MESSAGE HERE (Webcam)
             alert_messages = []
             for i, count in enumerate(zone_counts):
                 if count >= alert_threshold:
@@ -159,6 +153,7 @@ elif st.session_state.source_mode == "webcam":
             for i, c in enumerate(zone_counts):
                 log_row[f"Zone_{i}"] = c
             st.session_state.LOG.append(log_row)
+
             if len(st.session_state.LOG) > 500:
                 st.session_state.LOG = st.session_state.LOG[-500:]
 
@@ -171,7 +166,6 @@ elif st.session_state.source_mode == "webcam":
         media_stream_constraints={"video": True, "audio": False},
         async_processing=True,
     )
-    display_status_logs()
 
 elif st.session_state.source_mode == "video":
     uploaded_file = st.file_uploader("Upload a video", type=["mp4", "avi"])
@@ -207,6 +201,7 @@ elif st.session_state.source_mode == "video":
                 total = sum(zone_counts)
                 render_stats(total)
 
+                # ✅ ADD STATUS MESSAGE HERE (Video)
                 alert_messages = []
                 for i, count in enumerate(zone_counts):
                     if count >= alert_threshold:
@@ -229,15 +224,13 @@ elif st.session_state.source_mode == "video":
                 for i, c in enumerate(zone_counts):
                     log_row[f"Zone_{i}"] = c
                 st.session_state.LOG.append(log_row)
+
                 if len(st.session_state.LOG) > 500:
                     st.session_state.LOG = st.session_state.LOG[-500:]
 
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 FRAME_WINDOW.image(frame, width=640, channels="RGB")
                 time.sleep(0.03)
-
-                # ✅ Show Reverse Logs in Video Mode
-                display_status_logs()
 
             cap.release()
 
