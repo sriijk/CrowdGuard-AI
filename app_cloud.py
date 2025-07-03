@@ -19,7 +19,17 @@ from utils import detect_people, get_zone_id, draw_zone_grid
 GRID_ROWS, GRID_COLS = 3, 3
 model = YOLO("yolov8n.pt")
 
-# ✅ Updated speak() function to skip TTS on non-Windows (like Streamlit Cloud)
+# ✅ Play beep sound via HTML (Cloud-friendly)
+def play_beep():
+    with open("Beep2.m4a", "rb") as f:
+        beep_base64 = base64.b64encode(f.read()).decode("utf-8")
+    components.html(f"""
+    <audio autoplay>
+        <source src="data:audio/mp3;base64,{beep_base64}" type="audio/mp3">
+    </audio>
+    """, height=0)
+
+# ✅ Updated speak() function to auto-play beep on cloud
 def speak(text):
     if platform.system() == "Windows":
         try:
@@ -30,7 +40,8 @@ def speak(text):
         except Exception as e:
             print(f"Speech error: {e}")
     else:
-        print(f"TTS skipped on non-Windows system: {text}")
+        play_beep()
+        print(f"TTS skipped on cloud; beep played instead: {text}")
 
 st.set_page_config(page_title="CrowdGuardAI", layout="wide")
 st.title("\U0001F6E1️ CrowdGuardAI - Real-Time Crowd Monitoring")
