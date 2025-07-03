@@ -118,18 +118,6 @@ elif st.session_state.source_mode == "webcam":
             detections = detect_people(model, img, conf=detection_confidence)
             draw_zone_grid(img, GRID_ROWS, GRID_COLS)
 
-            # ✅ ADD STATUS MESSAGE HERE (Webcam)
-            alert_messages = []
-            for i, count in enumerate(zone_counts):
-                if count >= alert_threshold:
-                    alert_messages.append(f"🚨 Overcrowded: People: {count}, Zone: {i}")
-                elif count >= int(alert_threshold * 0.6):
-                    alert_messages.append(f"⚠️ Moderate crowd: People: {count}, Zone: {i}")
-            if alert_messages:
-                st.warning("\n".join(alert_messages))
-            else:
-                st.success("🟢 Normal: All zones under control")
-
             for det in detections:
                 x1, y1, x2, y2, conf = det
                 xc, yc = (x1 + x2) // 2, (y1 + y2) // 2
@@ -141,6 +129,18 @@ elif st.session_state.source_mode == "webcam":
 
             total = sum(zone_counts)
             render_stats(total)
+
+            # ✅ ADD STATUS MESSAGE HERE (Webcam)
+            alert_messages = []
+            for i, count in enumerate(zone_counts):
+                if count >= alert_threshold:
+                    alert_messages.append(f"🚨 Overcrowded: People: {count}, Zone: {i}")
+                elif count >= int(alert_threshold * 0.6):
+                    alert_messages.append(f"⚠️ Moderate crowd: People: {count}, Zone: {i}")
+            if alert_messages:
+                st.warning("\n".join(alert_messages))
+            else:
+                st.success("🟢 Normal: All zones under control")
 
             for i, count in enumerate(zone_counts):
                 if count >= alert_threshold:
@@ -166,6 +166,11 @@ elif st.session_state.source_mode == "webcam":
         media_stream_constraints={"video": True, "audio": False},
         async_processing=True,
     )
+    # ✅ ADD THIS BELOW IT (outside class!)
+    if st.session_state.LOG:
+        st.subheader("📋 Recent Crowd Logs (Latest First)")
+        log_df = pd.DataFrame(st.session_state.LOG)
+        st.dataframe(log_df.iloc[::-1].reset_index(drop=True), height=300, use_container_width=True)
 
 elif st.session_state.source_mode == "video":
     uploaded_file = st.file_uploader("Upload a video", type=["mp4", "avi"])
@@ -189,18 +194,6 @@ elif st.session_state.source_mode == "video":
                 detections = detect_people(model, frame, conf=detection_confidence)
                 draw_zone_grid(frame, GRID_ROWS, GRID_COLS)
 
-                # ✅ ADD STATUS MESSAGE HERE (Video)
-                alert_messages = []
-                for i, count in enumerate(zone_counts):
-                    if count >= alert_threshold:
-                        alert_messages.append(f"🚨 Overcrowded: People: {count}, Zone: {i}")
-                    elif count >= int(alert_threshold * 0.6):
-                        alert_messages.append(f"⚠️ Moderate crowd: People: {count}, Zone: {i}")
-                if alert_messages:
-                    st.warning("\n".join(alert_messages))
-                else:
-                    st.success("🟢 Normal: All zones under control")
-
                 for det in detections:
                     x1, y1, x2, y2, conf = det
                     xc, yc = (x1 + x2) // 2, (y1 + y2) // 2
@@ -212,6 +205,18 @@ elif st.session_state.source_mode == "video":
 
                 total = sum(zone_counts)
                 render_stats(total)
+
+                # ✅ ADD STATUS MESSAGE HERE (Video)
+                alert_messages = []
+                for i, count in enumerate(zone_counts):
+                    if count >= alert_threshold:
+                        alert_messages.append(f"🚨 Overcrowded: People: {count}, Zone: {i}")
+                    elif count >= int(alert_threshold * 0.6):
+                        alert_messages.append(f"⚠️ Moderate crowd: People: {count}, Zone: {i}")
+                if alert_messages:
+                    st.warning("\n".join(alert_messages))
+                else:
+                    st.success("🟢 Normal: All zones under control")
 
                 for i, count in enumerate(zone_counts):
                     if count >= alert_threshold:
@@ -233,6 +238,11 @@ elif st.session_state.source_mode == "video":
                 time.sleep(0.03)
 
             cap.release()
+
+        if st.session_state.LOG:
+            st.subheader("📋 Recent Crowd Logs (Latest First)")
+            log_df = pd.DataFrame(st.session_state.LOG)
+            st.dataframe(log_df.iloc[::-1].reset_index(drop=True), height=300, use_container_width=True)
 
         st.success("🎥 Video loaded.")
         process_video(cap)
