@@ -16,6 +16,9 @@ from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
 
 from utils import detect_people, get_zone_id, draw_zone_grid
 
+IS_CLOUD = "STREMLIT_SERVER_HEADLESS" in os.environ or "STREMLIT_SHARE" in os.environ
+
+
 GRID_ROWS, GRID_COLS = 3, 3
 model = YOLO("yolov8n.pt")
 
@@ -105,9 +108,12 @@ if st.session_state.source_mode is None:
     st.warning("⚠️ Browser webcam access may not work in Safari. Please use Chrome or Firefox.")
 
 elif st.session_state.source_mode == "webcam":
-    st.info("⚠️ Note: If you're running this app on platforms like Hugging Face or Streamlit Cloud, browser webcam and AI speech functionality may not work. Please run this app locally to access those features.")
-
-    class VideoProcessor(VideoTransformerBase):
+    if IS_CLOUD:
+        st.info("⚠️ Webcam streaming is not supported on this platform. Please use video upload instead.")
+    else:
+        st.info("⚠️ Note: If you're running this app on cloud platforms, browser webcam and AI speech functionality may not work. Please run this app locally to access those features.")
+        
+        class VideoProcessor(VideoTransformerBase):
         def __init__(self):
             self.zone_beep_timers = {}
 
