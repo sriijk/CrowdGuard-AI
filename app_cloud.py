@@ -113,65 +113,65 @@ elif st.session_state.source_mode == "webcam":
     else:
         st.info("⚠️ Note: If you're running this app on cloud platforms, browser webcam and AI speech functionality may not work. Please run this app locally to access those features.")
         
-    class VideoProcessor(VideoTransformerBase):
-        def __init__(self):
-            self.zone_beep_timers = {}
+        class VideoProcessor(VideoTransformerBase):
+            def __init__(self):
+                self.zone_beep_timers = {}
 
-        def transform(self, frame):
-            img = frame.to_ndarray(format="bgr24")
-            frame_h, frame_w = img.shape[:2]
-            zone_counts = [0] * (GRID_ROWS * GRID_COLS)
-            detections = detect_people(model, img, conf=detection_confidence)
-            draw_zone_grid(img, GRID_ROWS, GRID_COLS)
+            def transform(self, frame):
+                img = frame.to_ndarray(format="bgr24")
+                frame_h, frame_w = img.shape[:2]
+                zone_counts = [0] * (GRID_ROWS * GRID_COLS)
+                detections = detect_people(model, img, conf=detection_confidence)
+                draw_zone_grid(img, GRID_ROWS, GRID_COLS)
 
-            for det in detections:
-                x1, y1, x2, y2, conf = det
-                xc, yc = (x1 + x2) // 2, (y1 + y2) // 2
-                zone_id = get_zone_id(xc, yc, frame_w, frame_h, GRID_ROWS, GRID_COLS)
-                zone_counts[zone_id] += 1
-                if show_boxes:
-                    cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                    cv2.circle(img, (xc, yc), 3, (0, 0, 255), -1)
+                for det in detections:
+                    x1, y1, x2, y2, conf = det
+                    xc, yc = (x1 + x2) // 2, (y1 + y2) // 2
+                    zone_id = get_zone_id(xc, yc, frame_w, frame_h, GRID_ROWS, GRID_COLS)
+                    zone_counts[zone_id] += 1
+                    if show_boxes:
+                        cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                        cv2.circle(img, (xc, yc), 3, (0, 0, 255), -1)
 
-            total = sum(zone_counts)
-            render_stats(total)
+                total = sum(zone_counts)
+                render_stats(total)
 
-            # ✅ ADD STATUS MESSAGE HERE (Webcam)
-            alert_messages = []
-            for i, count in enumerate(zone_counts):
-                if count >= alert_threshold:
-                    alert_messages.append(f"🚨 Overcrowded: People: {count}, Zone: {i}")
-                elif count >= int(alert_threshold * 0.6):
-                    alert_messages.append(f"⚠️ Moderate crowd: People: {count}, Zone: {i}")
-            if alert_messages:
-                st.warning("\n".join(alert_messages))
-            else:
-                st.success("🟢 Normal: All zones under control")
+                # ✅ ADD STATUS MESSAGE HERE (Webcam)
+                alert_messages = []
+                for i, count in enumerate(zone_counts):
+                    if count >= alert_threshold:
+                        alert_messages.append(f"🚨 Overcrowded: People: {count}, Zone: {i}")
+                    elif count >= int(alert_threshold * 0.6):
+                        alert_messages.append(f"⚠️ Moderate crowd: People: {count}, Zone: {i}")
+                if alert_messages:
+                    st.warning("\n".join(alert_messages))
+                else:
+                    st.success("🟢 Normal: All zones under control")
 
-            for i, count in enumerate(zone_counts):
-                if count >= alert_threshold:
-                    cv2.putText(img, f"Zone {i} OVERCROWDED!", (10, 30 + i * 25), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-                    if time.time() - self.zone_beep_timers.get(i, 0) > 3:
-                        speak(f"Alert! Overcrowding in zone {i}")
-                        self.zone_beep_timers[i] = time.time()
+                for i, count in enumerate(zone_counts):
+                    if count >= alert_threshold:
+                        cv2.putText(img, f"Zone {i} OVERCROWDED!", (10, 30 + i * 25), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+                        if time.time() - self.zone_beep_timers.get(i, 0) > 3:
+                            speak(f"Alert! Overcrowding in zone {i}")
+                            self.zone_beep_timers[i] = time.time()
 
-            log_row = {"timestamp": time.strftime("%H:%M:%S")}
-            for i, c in enumerate(zone_counts):
-                log_row[f"Zone_{i}"] = c
-            st.session_state.LOG.append(log_row)
+                log_row = {"timestamp": time.strftime("%H:%M:%S")}
+                for i, c in enumerate(zone_counts):
+                    log_row[f"Zone_{i}"] = c
+                st.session_state.LOG.append(log_row)
 
-            if len(st.session_state.LOG) > 500:
-                st.session_state.LOG = st.session_state.LOG[-500:]
+                if len(st.session_state.LOG) > 500:
+                    st.session_state.LOG = st.session_state.LOG[-500:]
 
-            return cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+                return cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-    st.success("✅ Accessing browser webcam...")
-    webrtc_streamer(
-        key="live",
-        video_processor_factory=VideoProcessor,
-        media_stream_constraints={"video": True, "audio": False},
-        async_processing=True,
-    )
+        st.success("✅ Accessing browser webcam...")
+        webrtc_streamer(
+            key="live",
+            video_processor_factory=VideoProcessor,
+            media_stream_constraints={"video": True, "audio": False},
+            async_processing=True,
+        )
 
 elif st.session_state.source_mode == "video":
     uploaded_file = st.file_uploader("Upload a video", type=["mp4", "avi"])
