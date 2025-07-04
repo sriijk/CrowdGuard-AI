@@ -108,10 +108,8 @@ if st.session_state.source_mode is None:
     st.warning("⚠️ Browser webcam access may not work in Safari. Please use Chrome or Firefox.")
 
 elif st.session_state.source_mode == "webcam":
-    if IS_CLOUD:
-        st.info("⚠️ Webcam streaming is not supported on this platform. Please use video upload instead.")
-    else:
-        st.info("⚠️ Note: If you're running this app on cloud platforms, browser webcam and AI speech functionality may not work. Please run this app locally to access those features.")
+    try:
+        st.info("⚠️ Note: Webcam access may not work on cloud platforms like Streamlit Cloud or Hugging Face Spaces. If it fails, please use the video upload option instead.")
         
         class VideoProcessor(VideoTransformerBase):
             def __init__(self):
@@ -165,13 +163,17 @@ elif st.session_state.source_mode == "webcam":
 
                 return cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-        st.success("✅ Accessing browser webcam...")
+        st.success("✅ Attempting to access webcam...")
         webrtc_streamer(
             key="live",
             video_processor_factory=VideoProcessor,
             media_stream_constraints={"video": True, "audio": False},
             async_processing=True,
         )
+
+    except Exception as e:
+        st.error("🚫 Webcam streaming is not supported on this platform. Please use the video upload option instead.")
+
 
 elif st.session_state.source_mode == "video":
     uploaded_file = st.file_uploader("Upload a video", type=["mp4", "avi"])
