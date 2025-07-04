@@ -85,7 +85,7 @@ CrowdGuard-AI/
 ### 🚀 Try Live Demos (Video Upload Only, View-Only)
 > ⚠️ Webcam & audio alerts won’t work on cloud platforms.
 
-- 🌐 **[Streamlit Cloud Demo → Try Now]([https://crowdguard-ai-xxjwxh56aazz35csz975yy.streamlit.app/](https://crowdguard-ai-xxjwxh56aazz35csz975yy.streamlit.app/))**
+- 🌐 **[Streamlit Cloud Demo → Try Now](https://crowdguard-ai-xxjwxh56aazz35csz975yy.streamlit.app/)**
 - 🤗 **[Hugging Face Spaces Demo → Try Now](https://huggingface.co/spaces/SrishtiB/CrowdGuardAI)**
 
 ---
