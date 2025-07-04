@@ -5,19 +5,20 @@
 
 ## 📌 Project Summary
 CrowdGuard AI is an AI-powered real-time crowd monitoring and alert system designed to enhance safety, surveillance, and crowd management using computer vision.
+
 ✅ Key highlights:
--⚡ Real-time Crowd Detection: Leverages YOLOv8 Nano for fast, efficient people detection on live video streams or uploaded videos.
--🗺️ Zone-Based Density Analysis: Splits video frames into a 3×3 grid to monitor people density within each zone.
--🚨 Instant Alerts: Automatically generates visual and audio alerts if crowd levels exceed defined safety thresholds.
--📊 Analytics & Heatmaps: Offers crowd trend graphs and heatmaps (live, cumulative, and average) for deep analysis.
--💾 Data Logging & Export: Saves crowd data with timestamps, exportable as CSV for further reporting.
+- ⚡ Real-time Crowd Detection: Leverages YOLOv8 Nano for fast, efficient people detection on live video streams or uploaded videos.
+- 🗺️ Zone-Based Density Analysis: Splits video frames into a 3×3 grid to monitor people density within each zone.
+- 🚨 Instant Alerts: Automatically generates visual and audio alerts if crowd levels exceed defined safety thresholds.
+- 📊 Analytics & Heatmaps: Offers crowd trend graphs and heatmaps (live, cumulative, and average) for deep analysis.
+- 💾 Data Logging & Export: Saves crowd data with timestamps, exportable as CSV for further reporting.
 
 ✅ Suitable for use in:
--🎪 Large Events & Public Gatherings: Festivals, concerts, rallies, exhibitions.
--🏫 School & Campus Safety: Monitor canteens, hallways, or assembly areas.
--🚆 Transportation Hubs: Metro stations, airports, bus terminals.
--🏬 Commercial Spaces: Shopping malls, markets, or stadiums.
--🚨 Emergency Evacuation Planning: Monitor crowd buildup during drills or emergencies.
+- 🎪 Large Events & Public Gatherings: Festivals, concerts, rallies, exhibitions.
+- 🏫 School & Campus Safety: Monitor canteens, hallways, or assembly areas.
+- 🚆 Transportation Hubs: Metro stations, airports, bus terminals.
+- 🏬 Commercial Spaces: Shopping malls, markets, or stadiums.
+- 🚨 Emergency Evacuation Planning: Monitor crowd buildup during drills or emergencies.
 
 ---
 
