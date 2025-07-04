@@ -113,7 +113,7 @@ elif st.session_state.source_mode == "webcam":
     else:
         st.info("⚠️ Note: If you're running this app on cloud platforms, browser webcam and AI speech functionality may not work. Please run this app locally to access those features.")
         
-        class VideoProcessor(VideoTransformerBase):
+    class VideoProcessor(VideoTransformerBase):
         def __init__(self):
             self.zone_beep_timers = {}
 
